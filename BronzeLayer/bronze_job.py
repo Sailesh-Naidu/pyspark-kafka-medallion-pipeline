@@ -24,7 +24,7 @@ trade_schema = StructType([
 
 def create_spark():
     return (
-        SparkSession.builder.appName("Bronzelayer").config(
+        SparkSession.builder.appName("BronzeLayer").config(
             "spark.jars.packages",
             "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,"
             "io.delta:delta-spark_2.12:3.1.0"
@@ -41,26 +41,6 @@ def read_kafka(spark):
         .option("maxOffsetsPerTrigger", 100)
         .load()
     )
-'''
-def isValid(df):
-    valid_condition = (
-            col("corrupt_record").isNull() &
-            col("trade_id").isNotNull() &
-            col("trader_id").isNotNull() &
-            col("price").cast("double").isNotNull() &
-            (col("price") > 0) &
-            col("quantity").cast("int").isNotNull() &
-            (col("quantity") > 0) &
-            col("trade_timestamp").isNotNull() &
-            (col("trade_timestamp") <= col("ingestion_time")) &
-            col("side").isin(['BUY', 'SELL']) &
-            col("exchange").isin(["NYSE", "NASDAQ", "BINANCE"])
-    )
-    valid_df = df.filter(valid_condition)
-    dlq_df = df.filter(~valid_condition)
-
-    return valid_df, dlq_df
-'''
 
 def transform(df):
     df1 = df.selectExpr("CAST(value AS STRING) as value",
@@ -100,7 +80,7 @@ def main():
 
     query_trades = write_stream(trades_bronze,'checkpoints/bronze/trades', "data/bronze/trades")
 
-    query_trades.awaitTermination()
+    spark.streams.awaitAnyTermination()
 
 if __name__ == "__main__":
     main()
