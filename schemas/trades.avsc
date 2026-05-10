@@ -1,0 +1,78 @@
+{
+  "type": "record",
+  "name": "Trade",
+  "namespace": "com.trades",
+  "fields": [
+    {
+      "name": "trade_id",
+      "type": "string"
+    },
+    {
+      "name": "symbol",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "type": "double"
+    },
+    {
+      "name": "quantity",
+      "type": ["null", "int"],
+      "default": null
+    },
+    {
+      "name": "trade_timestamp",
+      "type": "string"
+    },
+    {
+      "name": "ingestion_timestamp",
+      "type": "string"
+    },
+    {
+      "name": "exchange",
+      "type": {
+        "type": "enum",
+        "name": "ExchangeEnum",
+        "symbols": [
+          "NYSE",
+          "NASDAQ",
+          "BINANCE",
+          "UNKNOWN"
+        ]
+      },
+      "default": "UNKNOWN"
+    },
+    {
+      "name": "side",
+      "type": {
+        "type": "enum",
+        "name": "SideEnum",
+        "symbols": [
+          "BUY",
+          "SELL",
+          "UNKNOWN"
+        ]
+      },
+      "default": "UNKNOWN"
+    },
+    {
+      "name": "metadata",
+      "type": {
+        "type": "record",
+        "name": "Metadata",
+        "fields": [
+          {
+            "name": "source",
+            "type": "string",
+            "default": "producer"
+          },
+          {
+            "name": "version",
+            "type": "int",
+            "default": 1
+          }
+        ]
+      }
+    }
+  ]
+}

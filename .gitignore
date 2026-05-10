@@ -22,6 +22,8 @@ data/
 # Mac
 .DS_Store
 
+Kafka/dlq_messages.json
+
 # IDE
 .idea/
 .vscode/
