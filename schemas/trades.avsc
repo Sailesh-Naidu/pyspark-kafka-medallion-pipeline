@@ -16,6 +16,11 @@
       "type": "double"
     },
     {
+      "name": "trader_id",
+      "type": "string",
+      "default": "null"
+    },
+    {
       "name": "quantity",
       "type": ["null", "int"],
       "default": null
@@ -54,6 +59,11 @@
         ]
       },
       "default": "UNKNOWN"
+    },
+    {
+      "name": "broker",
+      "type": ["null", "string"],
+      "default": null
     },
     {
       "name": "metadata",

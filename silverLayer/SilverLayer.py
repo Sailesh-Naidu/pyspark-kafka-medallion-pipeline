@@ -18,6 +18,27 @@ def read_bronze(spark):
     return  spark.readStream.format("delta").load("/Users/saileshpola/PycharmProjects/PythonProject/PysparkKafkaETE/BronzeLayer/data/bronze/trades")
 
 def transform(df):
+
+    flattened_df = df.select(
+        col("data.trade_id").alias("trade_id"),
+        col("data.trader_id").alias("trader_id"),
+        col("data.symbol").alias("symbol"),
+        col("data.price").alias("price"),
+        col("data.quantity").alias("quantity"),
+        col("data.trade_timestamp").alias("trade_timestamp"),
+        col("data.ingestion_timestamp").alias("ingestion_timestamp"),
+        col("data.exchange").alias("exchange"),
+        col("data.side").alias("side"),
+        col("data.broker").alias("broker"),
+        col("data.metadata.source").alias("source"),
+        col("data.metadata.version").alias("version"),
+        col("topic"),
+        col("partition"),
+        col("offset"),
+        col("kafka_timestamp"),
+        col("ingestion_time")
+    )
+
     parsed_ts = to_timestamp(col("trade_timestamp"))
 
     trade_id_valid = col("trade_id").isNotNull()
@@ -44,8 +65,8 @@ def transform(df):
             exchange_valid
     )
 
-    valid_trades = df.filter(valid_condition)
-    dlq_trades = (df.filter(~valid_condition).withColumn("dlq_reason", concat_ws(
+    valid_trades = flattened_df.filter(valid_condition)
+    dlq_trades = (flattened_df.filter(~valid_condition).withColumn("dlq_reason", concat_ws(
         ", ",
         when(~trade_id_valid, lit("missing_trade_id")),
         when(~trader_id_valid, lit("missing_trader_id")),

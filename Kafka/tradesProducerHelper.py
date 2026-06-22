@@ -115,6 +115,7 @@ def generate_trade():
         "trade_timestamp": datetime.utcnow().isoformat(),
         "ingestion_timestamp": datetime.utcnow().isoformat(),
         "exchange": random.choice(["NYSE", "NASDAQ", "BINANCE"]),
+        "broker": random.choice(['Zerodha',"PayTm","PhonePe","GppglePay"]),
         "side": random.choice(["BUY", "SELL"]),
         "metadata": {
             "source": random.choice(["mobile", "web", "api"]),
